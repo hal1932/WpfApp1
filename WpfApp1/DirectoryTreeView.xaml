@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="WpfApp1.DirectoryTreeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfApp1"
+             mc:Ignorable="d">
+
+    <TreeView Name="_rootControl" ItemsSource="{Binding ItemsSource}">
+        <TreeView.ItemContainerStyle>
+            <Style TargetType="TreeViewItem">
+                <Setter Property="IsSelected" Value="{Binding IsSelected.Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=False}"/>
+                <Setter Property="IsExpanded" Value="{Binding IsExpanded.Value, Mode=TwoWay, ValidatesOnNotifyDataErrors=False}"/>
+            </Style>
+        </TreeView.ItemContainerStyle>
+
+        <TreeView.ItemTemplate>
+            <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                <DockPanel ContextMenu="{Binding DataContext.ItemContextMenu, RelativeSource={RelativeSource FindAncestor, AncestorType=TreeView}}">
+                    <Image DockPanel.Dock="Left">
+                        <Image.Style>
+                            <Style TargetType="Image">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsFile}" Value="True">
+                                        <Setter Property="Source" Value="{Binding DataContext.FileImageSource, RelativeSource={RelativeSource FindAncestor, AncestorType=TreeView}}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsDirectory}" Value="True">
+                                        <Setter Property="Source" Value="{Binding DataContext.DirectoryImageSource, RelativeSource={RelativeSource FindAncestor, AncestorType=TreeView}}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
+                    <TextBlock Text="{Binding FileSystem.Name}"/>
+                </DockPanel>
+            </HierarchicalDataTemplate>
+        </TreeView.ItemTemplate>
+    </TreeView>
+
+</UserControl>
